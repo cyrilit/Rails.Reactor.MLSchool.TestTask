@@ -28,7 +28,7 @@ def convolve(image):
 #Detect modification (images which differ by size, blur level or noise filters)
 def detectModification(image1, image2):
     difValue = np.abs( convolve(image1) - convolve(image2) ).sum() / 1024 # average of all pixels of feature differences, 32 * 32 = 1024
-    if difValue < 2: # Let's assume that all images with difValue less 2 are modified to each other
+    if difValue < 6: # Let's assume that all images with difValue less 6 are modified to each other
         return True
     return False
 
@@ -43,7 +43,11 @@ def detectSimilar(image1, image2):
 
     RMS = sqrt( sum( map(lambda x, y: (x - y)**2, hist1, hist2) ) / len(hist1) )
     
-    if RMS < 3072 and difValue < 32: # Let's assume that all images with RMS less 3072 and difValue less 32 are similar to each other
+    if RMS < 3520 and difValue < 48: # rule 1: Let's assume that all images with RMS less 3520 and difValue less 48 are similar to each other
+        return True
+    if RMS < 7168 and difValue < 32: # rule 2: Let's assume that all images with RMS less 7168 and difValue less 32 are similar to each other
+        return True
+    if RMS < 46000 and difValue < 16: # rule 2: Let's assume that all images with RMS less 46000 and difValue less 16 are similar to each other
         return True
     return False
 
